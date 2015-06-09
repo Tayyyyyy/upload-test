@@ -13,9 +13,16 @@ require_once 'url.lib.php';
 	#if any files were uploaded
 	if($_FILES){
 		#move the files into the uploads folder
-		$tmp = $_FILES['file']['tmp_name'][0];
-		$filename = $_FILES['file']['name'][0];
-		move_uploaded_file($tmp, 'uploads/'.$filename);
+		if($_FILES){
+
+			$files = Upload::to_folder('uploads/');
+
+			if($files[0]['error_message'] == false){
+				URL::redirect($files[0]['filepath']);
+			}else{
+				echo $files[0]['error_message'];
+			}
+		}
 
 		#Redirect to the newly uploaded file
 		URL::redirect('uploads/'.$filename);
